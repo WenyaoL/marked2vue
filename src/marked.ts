@@ -17,11 +17,25 @@ import {
 
 import { VueRenderer } from './VueRenderer.js';
 import { VueParser } from './VueParser.js';
+import { VNode } from 'vue';
+
+
+
+function onError(e: { message: string; },silent:boolean) {
+  e.message += '\nPlease report this to https://github.com/markedjs/marked.';
+  if (silent) {
+    return '<p>An error occurred:</p><pre>'
+      + escape(e.message + '', true)
+      + '</pre>';
+  }
+  throw e;
+}
+
 
 /**
  * Marked
  */
-export function marked(src: any, opt: { highlight: any; walkTokens: any; silent: any; async: any; }, callback: (arg0: any, arg1?: any) => any) {
+export function marked(src: string, opt: any, callback: Function) {
   // throw error in case of non string input
   if (typeof src === 'undefined' || src === null) {
     throw new Error('marked(): input parameter is undefined or null');
@@ -50,14 +64,18 @@ export function marked(src: any, opt: { highlight: any; walkTokens: any; silent:
     }
 
     const done = function (err?:any) {
-      let out: string;
+      let out: string | (VNode | string)[];
 
       if (!err) {
         try {
           if (opt.walkTokens) {
             marked.walkTokens(tokens, opt.walkTokens);
           }
-          out = Parser.parse(tokens, opt);
+          if(opt.isVNodeModel){
+            out = VueParser.parse(tokens,opt)
+          }else{
+            out = Parser.parse(tokens, opt);
+          }
         } catch (e) {
           err = e;
         }
@@ -108,15 +126,7 @@ export function marked(src: any, opt: { highlight: any; walkTokens: any; silent:
     return;
   }
 
-  function onError(e: { message: string; }) {
-    e.message += '\nPlease report this to https://github.com/markedjs/marked.';
-    if (opt.silent) {
-      return '<p>An error occurred:</p><pre>'
-        + escape(e.message + '', true)
-        + '</pre>';
-    }
-    throw e;
-  }
+
 
   try {
     const tokens = Lexer.lex(src, opt);
@@ -124,15 +134,21 @@ export function marked(src: any, opt: { highlight: any; walkTokens: any; silent:
       if (opt.async) {
         return Promise.all(marked.walkTokens(tokens, opt.walkTokens))
           .then(() => {
+            if(opt.isVNodeModel){
+              return VueParser.parse(tokens, opt)
+            }
             return Parser.parse(tokens, opt);
           })
-          .catch(onError);
+          .catch(e=>onError(e,opt.silent));
       }
       marked.walkTokens(tokens, opt.walkTokens);
     }
+    if(opt.isVNodeModel){
+      return VueParser.parse(tokens, opt)
+    }
     return Parser.parse(tokens, opt);
   } catch (e) {
-    onError(e);
+    onError(e,opt.silent);
   }
 }
 
@@ -303,7 +319,7 @@ marked.use = function (...args: any[]) {
  * Run callback for every token
  */
 
-marked.walkTokens = function (tokens: any, callback: { call: (arg0: typeof marked, arg1: any) => any; }) {
+marked.walkTokens = function (tokens: any, callback: Function) {
   let values = [];
   for (const token of tokens) {
     values = values.concat(callback.call(marked, token));
@@ -341,7 +357,7 @@ marked.walkTokens = function (tokens: any, callback: { call: (arg0: typeof marke
  * Parse Inline
  * @param {string} src
  */
-marked.parseInline = function (src: any, opt: { walkTokens: any; silent: any; }) {
+marked.parseInline = function (src: string, opt: any) {
   // throw error in case of non string input
   if (typeof src === 'undefined' || src === null) {
     throw new Error('marked.parseInline(): input parameter is undefined or null');
@@ -359,6 +375,9 @@ marked.parseInline = function (src: any, opt: { walkTokens: any; silent: any; })
     if (opt.walkTokens) {
       marked.walkTokens(tokens, opt.walkTokens);
     }
+    if(opt.isVNodeModel){
+      return VueParser.parseInline(tokens,opt)
+    }
     return Parser.parseInline(tokens, opt);
   } catch (e) {
     e.message += '\nPlease report this to https://github.com/markedjs/marked.';
@@ -370,6 +389,15 @@ marked.parseInline = function (src: any, opt: { walkTokens: any; silent: any; })
     throw e;
   }
 };
+
+
+marked.parseVNode = function(src: string, opt: any, callback: Function){
+  return marked(src,Object.assign({isVNodeModel:true},opt),callback)
+}
+
+marked.parseInlineVNode = function(src: string, opt: any){
+  return marked.parseInline(src,Object.assign({isVNodeModel:true},opt))
+}
 
 /**
  * Expose
@@ -384,18 +412,22 @@ marked.Tokenizer = Tokenizer;
 marked.Slugger = Slugger;
 marked.parse = marked;
 
+
+
 //add VueParser
 marked.VueParser = VueParser;
-marked.parserVNode = VueParser.parse;
+marked.vueParser = VueParser.parse;
 marked.VueRenderer = VueRenderer;
-export const parserVNode = VueParser.parse;
 
+export const vueParser = VueParser.parse;
 export const options = marked.options;
 export const setOptions = marked.setOptions;
 export const use = marked.use;
 export const walkTokens = marked.walkTokens;
 export const parseInline = marked.parseInline;
+export const parseInlineVNode = marked.parseInlineVNode;
 export const parse = marked;
+export const parseVNode = marked.parseVNode;
 export const parser = Parser.parse;
 export const lexer = Lexer.lex;
 

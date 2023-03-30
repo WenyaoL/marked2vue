@@ -10,7 +10,7 @@ import vuePlugin from 'rollup-plugin-vue'
 import postcss from 'rollup-plugin-postcss'
 
 const env = process.env.NODE_ENV // umd 模式的编译结果文件输出的全局变量名称 
-console.log(env);
+
 const config = {
     external:['vue'],
     // 入口文件，src/index.ts 
