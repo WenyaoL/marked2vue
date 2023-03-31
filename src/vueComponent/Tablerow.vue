@@ -3,7 +3,7 @@ const props = defineProps<{}>()
 </script>
 
 <template>
-    <tr><solt></solt></tr>
+    <tr class="marked-vue-tr"><slot></slot></tr>
 </template>
 
 <style scoped>

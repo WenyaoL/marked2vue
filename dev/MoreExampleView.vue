@@ -1,6 +1,6 @@
 <script lang='ts'>
 import { h, defineComponent, VNode } from 'vue';
-import { VueParser, Lexer, marked,Slugger} from '../lib/marked2vue.esm'
+import { VueParser, Lexer, marked,Slugger} from '../src/index'
 import { markdownText3 } from './markdownText';
 
 

@@ -35,7 +35,7 @@ function onError(e: { message: string; },silent:boolean) {
 /**
  * Marked
  */
-export function marked(src: string, opt: any, callback: Function) {
+export function marked(src: string, opt?: any, callback?: Function) {
   // throw error in case of non string input
   if (typeof src === 'undefined' || src === null) {
     throw new Error('marked(): input parameter is undefined or null');
@@ -357,7 +357,7 @@ marked.walkTokens = function (tokens: any, callback: Function) {
  * Parse Inline
  * @param {string} src
  */
-marked.parseInline = function (src: string, opt: any) {
+marked.parseInline = function (src: string, opt?: any) {
   // throw error in case of non string input
   if (typeof src === 'undefined' || src === null) {
     throw new Error('marked.parseInline(): input parameter is undefined or null');
@@ -391,7 +391,7 @@ marked.parseInline = function (src: string, opt: any) {
 };
 
 
-marked.parseVNode = function(src: string, opt: any, callback: Function){
+marked.parseVNode = function(src: string, opt?: any, callback?: Function){
   return marked(src,Object.assign({isVNodeModel:true},opt),callback)
 }
 

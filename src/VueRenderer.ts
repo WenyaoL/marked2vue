@@ -114,14 +114,19 @@ export class VueRenderer {
     }
 
     /**
-     * @param {VNode} header
-     * @param {VNode} body
+     * @param {VNode[]} header
+     * @param {VNode[]} body
      */
-    table(header: VNode, body: VNode) {
-        if (body) body = h('tbody', body);
-
+    table(header: VNode[], body: VNode[]) {
+        //if (body) body = h('tbody', body);
+        if(body && body.length){
+            return h(Table, null, {
+                default: () => body,
+                header: () => header
+            })
+        }
+        
         return h(Table, null, {
-            default: () => body,
             header: () => header
         })
     }

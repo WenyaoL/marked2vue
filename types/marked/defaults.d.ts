@@ -1,0 +1,47 @@
+export function getDefaults(): {
+    async: boolean;
+    baseUrl: any;
+    breaks: boolean;
+    extensions: any;
+    gfm: boolean;
+    headerIds: boolean;
+    headerPrefix: string;
+    highlight: any;
+    langPrefix: string;
+    mangle: boolean;
+    pedantic: boolean;
+    renderer: any;
+    vueRenderer: any;
+    sanitize: boolean;
+    sanitizer: any;
+    silent: boolean;
+    smartypants: boolean;
+    tokenizer: any;
+    walkTokens: any;
+    xhtml: boolean;
+    isVNodeModel: boolean;
+};
+export function changeDefaults(newDefaults: any): void;
+export namespace defaults {
+    const async: boolean;
+    const baseUrl: any;
+    const breaks: boolean;
+    const extensions: any;
+    const gfm: boolean;
+    const headerIds: boolean;
+    const headerPrefix: string;
+    const highlight: any;
+    const langPrefix: string;
+    const mangle: boolean;
+    const pedantic: boolean;
+    const renderer: any;
+    const vueRenderer: any;
+    const sanitize: boolean;
+    const sanitizer: any;
+    const silent: boolean;
+    const smartypants: boolean;
+    const tokenizer: any;
+    const walkTokens: any;
+    const xhtml: boolean;
+    const isVNodeModel: boolean;
+}

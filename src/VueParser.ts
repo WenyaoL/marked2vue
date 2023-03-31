@@ -101,11 +101,11 @@ class VueParser {
           // header
           l2 = token.header.length;
           for (j = 0; j < l2; j++) {
-            cell += this.renderer.tablecell(
+            cell.push(this.renderer.tablecell(
               this.parseInline(token.header[j].tokens),
               { header: true, align: token.align[j] }
-            );
-          }
+            ));
+          }   
           header.push(this.renderer.tablerow(cell));
 
           //body
@@ -116,10 +116,10 @@ class VueParser {
             cell = [];
             l3 = row.length;
             for (k = 0; k < l3; k++) {
-              cell += this.renderer.tablecell(
+              cell.push(this.renderer.tablecell(
                 this.parseInline(row[k].tokens),
                 { header: false, align: token.align[k] }
-              );
+              ));
             }
 
             body.push(this.renderer.tablerow(cell));

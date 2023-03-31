@@ -1,11 +1,15 @@
 <script lang='ts'>
-import { h, defineComponent, VNode } from 'vue';
-import { VueParser, Lexer, marked,Slugger} from '../lib/marked2vue.esm'
+import { h, defineComponent, VNode,getCurrentInstance } from 'vue';
+import { VueParser, Lexer, marked,Slugger} from '../src/index'
 import CustomComponent from './component/CustomComponent.vue'
-
+import { fenceMarkdownText } from './markdownText'
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github.css'
 
 export default defineComponent({
   setup() {
+    //curr
+    const instance = getCurrentInstance()
 
     //use Original functions of Marked
     const html = marked.parse('# example-0\n\nRendered by **marked**.');
@@ -60,7 +64,21 @@ export default defineComponent({
     const originalVNode = marked('# example-6\n\nRendered by **marked**.',{isVNodeModel:true})
     const example6 = h('div',{class:'example-6'}, originalVNode)
 
-    return () => h('div',{class:'example'}, [example0,example1,example2,example3,example4,example5,example6])
+    //highlight code block
+    let example7:any = null
+    const highlightcode = marked.parseVNode(fenceMarkdownText,{
+      highlight:function(code, lang, callback){
+        const res = hljs.highlight(code, {language: lang,ignoreIllegals: true}).value
+        callback(null, res);
+      }
+    },(err,res)=>{
+      example7 = h('div',{class:'example-7'}, res)
+      console.log(example7);
+      instance?.proxy?.$forceUpdate()
+    })
+
+
+    return () => h('div',{class:'example'}, [example0,example1,example2,example3,example4,example5,example6,example7])
   }
 })
 </script>

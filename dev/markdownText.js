@@ -70,4 +70,24 @@ export const imgMarkdownText = `
 ![marked](https://camo.githubusercontent.com/74b21684dcc0418e3ab7e6f09a8d5d22b75327ab49f88e4143b086d389be1a8c/68747470733a2f2f6d61726b65642e6a732e6f72672f696d672f6c6f676f2d626c61636b2e737667)asdfasdfasdfsadfasdf
 `
 
-export const markdownText3 = markdownText1 + paragraphMarkdownText + fenceMarkdownText + imgMarkdownText
+export const tableMarkdownText = `
+### table
+| ADSF   | ASDF | ASDF |
+| ------ | ---- | ---- |
+| ASDF   | ASDF | ASDF |
+| ASDF   | ASDF | SADF |
+| SADFSD | F    | ASDF |
+`
+
+export const listMarkdownText = `
+* 123456
+* abcdef
+`
+
+export const markdownText3 = 
+markdownText1 + 
+paragraphMarkdownText + 
+fenceMarkdownText + 
+imgMarkdownText + 
+tableMarkdownText +
+listMarkdownText

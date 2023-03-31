@@ -1,7 +1,13 @@
 .DS_Store
 node_modules
 /dist
-
+/dev
+/test
+/babel.config.js
+/index.html
+/rollup.config.js
+/tsconfig.json
+/vite.config.ts
 
 # local env files
 .env.local
@@ -21,6 +27,3 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
-
-#Electron-builder output
-/dist_electron
