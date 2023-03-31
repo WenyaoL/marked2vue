@@ -395,7 +395,7 @@ marked.parseVNode = function(src: string, opt?: any, callback?: Function){
   return marked(src,Object.assign({isVNodeModel:true},opt),callback)
 }
 
-marked.parseInlineVNode = function(src: string, opt: any){
+marked.parseInlineVNode = function(src: string, opt?: any){
   return marked.parseInline(src,Object.assign({isVNodeModel:true},opt))
 }
 

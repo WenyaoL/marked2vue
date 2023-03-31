@@ -10,13 +10,13 @@ declare class VueParser {
     /**
      * Static Parse Method
      */
-    static parse(tokens: any, options: any): (string | VNode<import("vue").RendererNode, import("vue").RendererElement, {
+    static parse(tokens: any, options?: any): (string | VNode<import("vue").RendererNode, import("vue").RendererElement, {
         [key: string]: any;
     }>)[];
     /**
      * Static Parse Inline Method
      */
-    static parseInline(tokens: any, options: any): any[];
+    static parseInline(tokens: any, options?: any): any[];
     /**
      * Parse Loop
      */

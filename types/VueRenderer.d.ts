@@ -50,10 +50,10 @@ export declare class VueRenderer {
         [key: string]: any;
     }>;
     /**
-     * @param {VNode} header
-     * @param {VNode} body
+     * @param {VNode[]} header
+     * @param {VNode[]} body
      */
-    table(header: VNode, body: VNode): VNode<import("vue").RendererNode, import("vue").RendererElement, {
+    table(header: VNode[], body: VNode[]): VNode<import("vue").RendererNode, import("vue").RendererElement, {
         [key: string]: any;
     }>;
     /**

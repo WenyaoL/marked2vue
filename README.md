@@ -1,7 +1,22 @@
 # marked2vue
 A markdown parser and compiler. Built for speed.Integrate Vue framework based on the Marked.
 
-Marked2vue based on the Marked.You can use Marked2vue just like Marked
+Marked2vue based on the Marked.You can use Marked2vue just like Marked.
+
+- ⚡ built for speed
+- ⬇️ low-level compiler for parsing markdown without caching or blocking for long periods of time
+- :derelict_house: Support for markdown to VNode
+- :+1: Seamless compatibility with Marked
+
+
+
+### Install
+
+```shell
+npm install marked2vue
+```
+
+
 
 ### Original functions of Marked
 
@@ -42,6 +57,98 @@ export default defineComponent({
 
 
 
+### function
+
+#### Markdown to HTML String
+
+```ts
+import { marked,Lexer,Parser } from 'marked2vue'
+//use Original functions of Marked
+let html = marked.parse('# example-0\n\nRendered by **marked**.');
+
+//or
+html = marked('# example-5\n\nRendered by **marked**.')
+
+//or
+const lexer = new Lexer()
+const parser = new Parser()
+const tokens = lexer.lex('# example-3\n\nRendered by **marked**.')
+html = parser.parse(tokens)
+```
+
+
+
+#### Markdown to VNode of Vue 
+
+```ts
+import { marked,Lexer,VueParser } from 'marked2vue'
+//marked2vue extension function
+let vnode = marked.parseVNode('# example-2\n\nRendered by **marked**.')
+
+//or
+vnode = marked('# example-5\n\nRendered by **marked**.',{isVNodeModel:true})
+
+//or
+const lexer = new Lexer()
+const vueParser = new VueParser()
+const tokens = lexer.lex('# example-3\n\nRendered by **marked**.')
+vnode = vueParser.parse(tokens)
+```
+
+
+
+#### Asynchronous highlighting
+
+The codeBlock use asynchronous highlighting in marked.
+
+##### highlighting html
+
+more info [Using Advanced - Marked Documentation](https://marked.js.org/using_advanced#highlight)
+
+```js
+marked.setOptions({
+  highlight: function(code, lang, callback) {
+    require('pygmentize-bundled') ({ lang: lang, format: 'html' }, code, function (err, result) {
+      callback(err, result.toString());
+    });
+  }
+});
+
+marked.parse(markdownString, (err, html) => {
+  console.log(html);
+});
+```
+
+##### highlighting vnode
+
+```ts
+import { h, VNode, defineComponent } from 'vue';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github.css'
+
+export default defineComponent({
+    setup() {
+        //curr
+        const instance = getCurrentInstance()
+        let vnode:VNode = null
+        //or use setOptions() add highlight function
+        const highlightcode = marked.parseVNode(fenceMarkdownText,{
+            highlight:function(code, lang, callback){  //custom highlight function
+                const res = hljs.highlight(code, {language: lang,ignoreIllegals: true}).value
+                callback(null, res); //callback result
+            }
+        },(err,res)=>{ //callback
+            vnode = h('div',{class:'example-7'}, res)
+            instance?.proxy?.$forceUpdate()  //update vnode render
+        })
+        
+        return ()=>h('div',{class:'myexmple'},vnode)
+    }
+})
+```
+
+
+
 ### Extensibility
 
 marked extension:[Using Pro - Marked Documentation](https://marked.js.org/using_pro)
@@ -77,7 +184,7 @@ console.log(marked.parse('# heading+'));
 
 #### add marked2vue extension
 
-base on marked extension. add vueRenderer extension,
+base on marked extension. add vueRenderer extension。
 
 ##### CustomComponent.vue
 
@@ -122,7 +229,7 @@ import CustomComponent from './component/CustomComponent.vue'
 
 export default defineComponent({
   setup() {
-    
+    //like renderer.heading, but "inlineVnode" instead of "text"
     const vueRenderer = {
       heading(inlineVnode:VNode[], level:string, raw:string,slugger:any) {
         return h(CustomComponent,{level},()=>inlineVnode);
@@ -168,7 +275,9 @@ import 'highlight.js/styles/github.css'
 
 export default defineComponent({
   setup() {
-
+	//curr
+    const instance = getCurrentInstance()
+    
     //use Original functions of Marked
     const html = marked.parse('# example-0\n\nRendered by **marked**.');
     const example0 = h('div',{class:'example-0',innerHTML:html})
@@ -193,7 +302,6 @@ export default defineComponent({
 
 
     //use Extended functionality
-    
     const vnode1 = marked.parseVNode('# example-2\n\nRendered by **marked**.')
     const example2 = h('div',{class:'example-2'}, vnode1)
 

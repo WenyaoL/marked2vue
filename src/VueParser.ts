@@ -26,7 +26,7 @@ class VueParser {
   /**
    * Static Parse Method
    */
-  static parse(tokens: any, options: any) {
+  static parse(tokens: any, options?: any) {
     const parser = new VueParser(options);
     return parser.parse(tokens);
   }
@@ -34,7 +34,7 @@ class VueParser {
   /**
    * Static Parse Inline Method
    */
-  static parseInline(tokens: any, options: any) {
+  static parseInline(tokens: any, options?: any) {
     const parser = new VueParser(options);
     return parser.parseInline(tokens);
   }
