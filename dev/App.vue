@@ -1,6 +1,7 @@
 <script setup lang='ts'>
 import ExampleView from './ExampleView.vue';
 import MoreExampleView from './MoreExampleView.vue';
+import MarkedView from './MarkedView.vue';
 </script>
 
 <template>
@@ -10,8 +11,15 @@ import MoreExampleView from './MoreExampleView.vue';
     </div>
 
     <div>****************************************************************************************************</div>
-    
+
     <div class="exampleView">
       <ExampleView />
+    </div>
+
+    <div>****************************************************************************************************</div>
+
+    <div class="exampleView">
+      <MarkedView />
+    </div>
   </div>
-</div></template>
+</template>

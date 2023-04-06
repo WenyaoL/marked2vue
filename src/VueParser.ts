@@ -1,4 +1,5 @@
 import { VueRenderer } from './VueRenderer';
+import {Renderer} from './marked/Renderer'
 import { TextRenderer } from './marked/TextRenderer.js';
 import { Slugger } from './marked/Slugger.js';
 import { defaults } from './marked/defaults.js';
@@ -7,6 +8,8 @@ import {
 } from './marked/helpers.js';
 
 import { VNode } from 'vue';
+
+
 
 class VueParser {
   options: any;
@@ -217,12 +220,16 @@ class VueParser {
    */
   parseInline(tokens: string | any[], renderer = null): any[]{
     renderer = renderer || this.renderer;
+    const htmlRenderer = new Renderer()
     let out = [],
       i: number,
       token: {
-        raw: any; type: string; text: any; href: any; title: any; tokens: any; 
-},
-      ret: boolean;
+        raw: string; type: string; text: string; href: any; title: any; tokens: any; 
+      },
+      ret: boolean,
+      tagStack=[],
+      tag='',
+      html='';
 
     const l = tokens.length;
     for (i = 0; i < l; i++) {
@@ -239,42 +246,94 @@ class VueParser {
 
       switch (token.type) {
         case 'escape': {
+          if(tagStack.length!=0){ 
+            html += htmlRenderer.text(token.raw)
+            break;
+          }
           out.push(renderer.text(token.text));
           break;
         }
         case 'html': {
-          out.push(renderer.html(token.text));
+          //close tag
+          if(token.raw.startsWith("</")){
+            if(tag == token.raw.replace(/(^<\/?)|(\/?>$)/g,'')) tagStack.pop()
+            
+            if(tagStack.length == 0) {
+              out.push(renderer.inlineHtml(html));
+              html = ''
+            }
+          }else{//open tag
+            if(token.raw.endsWith("/>")){
+              html += token.text
+              break;
+            }
+            tag = token.raw.replace(/(^<\/?)|(\/?>$)/g,'')
+            html += token.text
+            tagStack.push(token)
+          }
           break;
         }
         case 'link': {
+          if(tagStack.length!=0){ 
+            html += htmlRenderer.text(token.raw)
+            break;
+          }
           out.push(renderer.link(token.href, token.title, this.parseInline(token.tokens, renderer)));
           break;
         }
         case 'image': {
+          if(tagStack.length!=0){ 
+            html += htmlRenderer.text(token.raw)
+            break;
+          }
           out.push(renderer.image(token.href, token.title, token.text));
           break;
         }
         case 'strong': {
+          if(tagStack.length!=0){ 
+            html += htmlRenderer.text(token.raw)
+            break;
+          }
           out.push(renderer.strong(this.parseInline(token.tokens, renderer)));
           break;
         }
         case 'em': {
+          if(tagStack.length!=0){ 
+            html += htmlRenderer.text(token.raw)
+            break;
+          }
           out.push(renderer.em(this.parseInline(token.tokens, renderer)));
           break;
         }
         case 'codespan': {
+          if(tagStack.length!=0){ 
+            html += htmlRenderer.text(token.raw)
+            break;
+          }
           out.push(renderer.codespan(token.text));
           break;
         }
         case 'br': {
+          if(tagStack.length!=0){ 
+            html += htmlRenderer.text(token.raw)
+            break;
+          }
           out.push(renderer.br());
           break;
         }
         case 'del': {
+          if(tagStack.length!=0){ 
+            html += htmlRenderer.text(token.raw)
+            break;
+          }
           out.push(renderer.del(this.parseInline(token.tokens, renderer)));
           break;
         }
         case 'text': {
+          if(tagStack.length!=0){ 
+            html += htmlRenderer.text(token.raw)
+            break;
+          }
           out.push(renderer.text(token.raw));
           break;
         }
@@ -289,6 +348,12 @@ class VueParser {
         }
       }
     }
+
+    if(tagStack.length>0){
+      out.push(renderer.inlineHtml(html));
+      html = ''
+    }
+    html = ''
     return out;
   }
 }

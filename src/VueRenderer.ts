@@ -3,7 +3,8 @@ import {
     cleanUrl,
     escape
 } from './marked/helpers.js';
-import { h, VNode } from 'vue'
+import { h, VNode, createStaticVNode } from 'vue'
+import {Slugger} from './marked/Slugger'
 
 import Link from './vueComponent/Link.vue'
 import Image from './vueComponent/Image.vue'
@@ -23,6 +24,9 @@ import Table from './vueComponent/Table.vue'
 
 import Listitem from './vueComponent/Listitem.vue'
 import List from './vueComponent/List.vue'
+
+let staticCount = 0
+
 /**
  * Renderer
  */
@@ -70,13 +74,17 @@ export class VueRenderer {
         return h('div', { class: 'html', innerHTML: html });
     }
 
+    inlineHtml(html:any,){
+        return createStaticVNode(html,staticCount++)
+    }
+
     /**
      * @param {string} inlineVNode
      * @param {string} level
      * @param {string} raw
      * @param {any} slugger
      */
-    heading(inlineVNode: string | VNode | VNode[], level: string, raw: any, slugger: { slug: (arg0: any) => any; }) {
+    heading(inlineVNode: string | VNode | VNode[], level: string, raw: any, slugger: Slugger) {
         if (this.options.headerIds) {
             const id = this.options.headerPrefix + slugger.slug(raw);
             return h(Heading, { level, id }, () => inlineVNode)
