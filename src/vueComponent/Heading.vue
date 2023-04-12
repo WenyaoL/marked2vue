@@ -23,7 +23,7 @@ const props = defineProps<{ level: string | number, id?: string }>()
     </h6>
 </template>
 
-<style scoped>
+<style>
 .marked-vue-heading1 {
     font-size: 2em;
     border-bottom: 1px solid #eee;

@@ -12,4 +12,4 @@ const hasSlot = (name:string) => !!slots[name];
     </table>
 </template>
 
-<style scoped></style>
+<style></style>

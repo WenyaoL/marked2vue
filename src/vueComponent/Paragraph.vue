@@ -6,7 +6,7 @@ const props = defineProps<{}>()
     <p class="marked-vue-paragraph"><slot></slot></p>
 </template>
 
-<style scoped>
+<style>
 .marked-vue-paragraph{
     
 }

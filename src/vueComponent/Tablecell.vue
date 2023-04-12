@@ -7,6 +7,6 @@ const props = defineProps<{flags: { header: any; align: any; }}>()
     <td class="marked-vue-td" v-else :align="flags.align"><slot></slot></td>
 </template>
 
-<style scoped>
+<style>
 
 </style>

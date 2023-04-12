@@ -7,7 +7,7 @@ const props = defineProps<{ordered: any, start: string | number}>()
     <ul class="marked-vue-bulletList" v-else><slot></slot></ul>
 </template>
 
-<style scoped>
+<style>
 .marked-vue-orderList{
     padding-inline-start: 35px;
 }

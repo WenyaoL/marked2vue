@@ -6,6 +6,6 @@ const props = defineProps<{}>()
     <del class="marked-vue-deleteLine"><slot></slot></del>
 </template>
 
-<style scoped>
+<style>
 
 </style>

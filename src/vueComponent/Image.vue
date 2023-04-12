@@ -6,7 +6,7 @@ const props = defineProps<{src:string,alt?:string,title?:string}>()
     <img class="marked-vue-img" :src="src" :alt="alt" :title="title"/>
 </template>
 
-<style scoped>
+<style>
 .marked-vue-img{
     display: block;
     margin: 0 auto;

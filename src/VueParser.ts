@@ -10,6 +10,24 @@ import {
 import { VNode } from 'vue';
 
 
+interface Token{
+  type: string; 
+  tokens: any; 
+  depth: any; 
+  text: any; 
+  lang: any; 
+  escaped: any; 
+  header: string | any[]; 
+  align: any[]; 
+  rows: string | any[]; 
+  ordered: any; 
+  start: any; 
+  loose: any; 
+  items: string | any[];
+  checked:any,
+  task:boolean
+}
+
 
 class VueParser {
   options: any;
@@ -50,10 +68,7 @@ class VueParser {
       i: number,
       j: number,
       k: number,
-      row: string | any[],
-      token: { type: string; tokens: any; depth: any; text: any; lang: any; escaped: any; header: string | any[]; align: any[]; rows: string | any[]; ordered: any; start: any; loose: any; items: string | any[]; },
-      item: { checked: any; task: any; tokens: any },
-      task: any,
+      token: Token,
       ret: boolean;
 
     const l = tokens.length;
@@ -97,6 +112,7 @@ class VueParser {
           let cell: any[] = [],
             header: any[] = [],
             body: any[] = [],
+            row: string | any[],
             l2: number,
             l3: number;
 
@@ -144,7 +160,9 @@ class VueParser {
             loose: boolean = token.loose,
             checkbox: VNode,
             checked: any,
-            itemBody: any[] = [];
+            itemBody: any[] = [],
+            item: { checked: any; task: any; tokens: any },
+            task: any;
 
           for (j = 0; j < l2; j++) {
             item = token.items[j];
@@ -170,11 +188,20 @@ class VueParser {
                 itemBody.push(checkbox);
               }
             }
-
-            itemBody.push(this.parse(item.tokens, loose));
+            itemBody.push(...this.parse(item.tokens, loose));
             body.push(this.renderer.listitem(itemBody, task, checked));
           }
           out.push(this.renderer.list(body, ordered, start));
+          continue;
+        }
+        case 'list_item': {
+          let itemBody: any[] = [],
+              loose: boolean = token.loose,
+              item = token,
+              checked = token.checked,
+              task: any = item.task;
+          itemBody.push(...this.parse(item.tokens, loose));
+          out.push(this.renderer.listitem(itemBody, task, checked))
           continue;
         }
         case 'html': {
@@ -188,15 +215,15 @@ class VueParser {
         }
         case 'text': {
           let body: any[] = [];
-
           body = [token.tokens ? this.parseInline(token.tokens) : token.text];
+          
           while (i + 1 < l && tokens[i + 1].type === 'text') {
             token = tokens[++i];
             body.push((token.tokens ? this.parseInline(token.tokens) : token.text));
           }
           if(top) out.push(this.renderer.paragraph(body))
           else {
-            out = out.concat(body)
+            out.push(...body)
           }
           continue;
         }

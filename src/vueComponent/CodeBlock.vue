@@ -6,7 +6,7 @@ const props = defineProps<{}>()
     <pre class="marked-vue-fence"><slot></slot></pre>
 </template>
 
-<style scoped>
+<style>
 .marked-vue-fence{
     font-size: 13.5px;
     border: 1px solid #e7eaed;

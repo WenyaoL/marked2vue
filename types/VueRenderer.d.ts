@@ -1,4 +1,5 @@
 import { VNode } from 'vue';
+import { Slugger } from './marked/Slugger';
 /**
  * Renderer
  */
@@ -17,15 +18,16 @@ export declare class VueRenderer {
     html(html: any): VNode<import("vue").RendererNode, import("vue").RendererElement, {
         [key: string]: any;
     }>;
+    inlineHtml(html: any): VNode<import("vue").RendererNode, import("vue").RendererElement, {
+        [key: string]: any;
+    }>;
     /**
      * @param {string} inlineVNode
      * @param {string} level
      * @param {string} raw
      * @param {any} slugger
      */
-    heading(inlineVNode: string | VNode | VNode[], level: string, raw: any, slugger: {
-        slug: (arg0: any) => any;
-    }): VNode<import("vue").RendererNode, import("vue").RendererElement, {
+    heading(inlineVNode: string | VNode | VNode[], level: string, raw: any, slugger: Slugger): VNode<import("vue").RendererNode, import("vue").RendererElement, {
         [key: string]: any;
     }>;
     hr(): VNode<import("vue").RendererNode, import("vue").RendererElement, {

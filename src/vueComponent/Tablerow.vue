@@ -6,6 +6,6 @@ const props = defineProps<{}>()
     <tr class="marked-vue-tr"><slot></slot></tr>
 </template>
 
-<style scoped>
+<style>
 
 </style>

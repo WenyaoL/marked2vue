@@ -8,7 +8,7 @@ const props = defineProps<{}>()
     </blockquote>
 </template>
 
-<style scoped>
+<style>
 .marked-vue-blockquote {
     padding: 0 15px;
     color: #777;

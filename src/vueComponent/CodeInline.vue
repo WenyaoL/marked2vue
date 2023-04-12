@@ -6,7 +6,7 @@ const props = defineProps<{text:string}>()
     <code class="marked-vue-codeInline">{{ text }}</code>
 </template>
 
-<style scoped>
+<style>
 .marked-vue-codeInline{
     border: 1px solid #e7eaed;
     border-radius: 3px;

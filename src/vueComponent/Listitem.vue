@@ -6,6 +6,6 @@ const props = defineProps<{}>()
     <li class="marked-vue-li"><slot></slot></li>
 </template>
 
-<style scoped>
+<style>
 
 </style>
