@@ -77,14 +77,12 @@ export default defineComponent({
       instance?.proxy?.$forceUpdate()
     })
 
-
-
     let example8:any = null
-    /*lexer.tokens = []
-    const vnode4 = vueParser.parse(lexer.lex(listMarkdownText)[1].items)
-    example8 = h('div',{class:'example-8'}, vnode4)*/
-
-    return () => h('div',{class:'example'}, [example0,example1,example2,example3,example4,example5,example6,example7])
+    lexer.tokens = []
+    const t = lexer.lex(listMarkdownText)[1].items
+    const vnode4 = vueParser.parse(t)
+    example8 = h('div',{class:'example-8'}, vnode4)
+    return () => h('div',{class:'example'}, [example0,example1,example2,example3,example4,example5,example6,example7,example8])
   }
 })
 </script>

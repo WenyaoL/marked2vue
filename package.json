@@ -1,6 +1,6 @@
 {
   "name": "marked2vue",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A markdown parser and compiler. Built for speed.Integrate Vue framework based on the Marked.",
   "main": "./lib/marked2vue.esm.js",
   "module": "./lib/marked2vue.esm.js",

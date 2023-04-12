@@ -202,6 +202,7 @@ class VueParser {
               task: any = item.task;
           itemBody.push(...this.parse(item.tokens, loose));
           out.push(this.renderer.listitem(itemBody, task, checked))
+          
           continue;
         }
         case 'html': {
@@ -214,13 +215,12 @@ class VueParser {
           continue;
         }
         case 'text': {
-          let body: any[] = [];
-          body = [token.tokens ? this.parseInline(token.tokens) : token.text];
-          
+          let body: any[] = [token.tokens && token.tokens.length > 0 ? this.parseInline(token.tokens) : token.text];
           while (i + 1 < l && tokens[i + 1].type === 'text') {
             token = tokens[++i];
             body.push((token.tokens ? this.parseInline(token.tokens) : token.text));
           }
+          
           if(top) out.push(this.renderer.paragraph(body))
           else {
             out.push(...body)
